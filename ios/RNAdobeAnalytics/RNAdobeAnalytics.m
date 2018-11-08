@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 #import "RNAdobeAnalytics.h"
 #import "ADBMobile.h"
 
@@ -24,18 +25,16 @@
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(init: (NSDictionary *)options)
-{
-    NSString *config = [[NSBundle mainBundle] pathForResource:@"ADBMobileConfig" ofType:@"json"];
++ (void) initADBMobile: (BOOL)isDebug configFileName:(NSString *)configFileName {
+    NSString *config = [[NSBundle mainBundle] pathForResource:configFileName ofType:@"json"];
     
-    [ADBMobile collectLifecycleData];
     [ADBMobile overrideConfigPath:config];
-    
-    BOOL debug = options[@"debug"];
-    
-    if (debug) {
-        [ADBMobile setDebugLogging:debug];
-    }
+    [ADBMobile collectLifecycleData];
+    [ADBMobile setDebugLogging:isDebug];
+}
+
+RCT_EXPORT_METHOD(init: (NSDictionary *)options configFileName:(NSString *)configFileName ) {
+    [[self class] initADBMobile: options[@"debug"] configFileName:configFileName];
 }
 
 RCT_EXPORT_METHOD(trackAction: (NSString *)action contextData:(NSDictionary *)contextData) {
@@ -44,6 +43,15 @@ RCT_EXPORT_METHOD(trackAction: (NSString *)action contextData:(NSDictionary *)co
 
 RCT_EXPORT_METHOD(trackState: (NSString *)state contextData:(NSDictionary *)contextData) {
     [ADBMobile trackState:state data:contextData];
+}
+
+RCT_EXPORT_METHOD(trackLocation:(double)latitude longitude:(double)longitude contextData:(NSDictionary *)contextData) {
+    CLLocation *location =  [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+    [ADBMobile trackLocation:location data:contextData];
+}
+
+RCT_EXPORT_METHOD(trackVideo:(NSString *)action contextData:(NSDictionary *)contextData) {
+ //Added this method to avoid the crash when trackVideo is called from javascript side.
 }
 
 //Extending the framework to include timed actions and tracking marketing cloud ID for user

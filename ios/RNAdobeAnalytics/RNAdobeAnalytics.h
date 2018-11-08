@@ -9,4 +9,5 @@
 
 @interface RNAdobeAnalytics : NSObject <RCTBridgeModule>
 // Define class properties here with @property
++ (void) initADBMobile: (BOOL)isDebug configFileName:(NSString *)configFileName;
 @end

@@ -8,8 +8,8 @@ const { RNAdobeAnalytics } = NativeModules;
 // ------------------------------------
 
 export class AdobeAnalyticsAPI {
-  static init(debug = false) {
-    RNAdobeAnalytics.init({ debug });
+  static init(debug = false, configFile) {
+    RNAdobeAnalytics.init({ debug, configFile });
   }
 
   static trackState(state, contextData = {}) {
@@ -18,6 +18,10 @@ export class AdobeAnalyticsAPI {
 
   static trackAction(action, contextData = {}) {
     RNAdobeAnalytics.trackAction(action, contextData);
+  }
+
+  static trackLocation(latitude, longitude, contextData = {}) {
+    RNAdobeAnalytics.trackLocation(latitude, longitude, contextData);
   }
 
   static trackVideo(action, settings = {}) {
@@ -86,6 +90,22 @@ export const AdobeAnalyticsTrackAction = ({ action, contextData }) => {
 
 AdobeAnalyticsTrackAction.propTypes = {
   action: PropTypes.string.isRequired,
+  contextData: PropTypes.object
+};
+
+// ------------------------------------
+// TrackLocation component
+// ------------------------------------
+
+export const AdobeAnalyticsTrackLocation = ({ latitude, longitude, contextData }) => {
+  AdobeAnalyticsAPI.trackLocation(latitude, longitude, contextData);
+
+  return null;
+};
+
+AdobeAnalyticsTrackLocation.propTypes = {
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
   contextData: PropTypes.object
 };
 

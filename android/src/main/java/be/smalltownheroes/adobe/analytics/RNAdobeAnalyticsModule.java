@@ -1,9 +1,12 @@
 
 package be.smalltownheroes.adobe.analytics;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.HashMap;
 
+import android.location.Location;
 import android.util.Log;
 import android.app.Activity;
 
@@ -52,14 +55,25 @@ public class RNAdobeAnalyticsModule extends ReactContextBaseJavaModule {
 		reactContext.addLifecycleEventListener(mLifecycleEventListener);
 	}
 
+	public static void initADBMobile(Boolean isDebug, InputStream configInput) {
+		Config.overrideConfigStream(configInput);
+		Config.setDebugLogging(isDebug);
+	}
+
 	@Override
 	public String getName() {
 		return "RNAdobeAnalytics";
 	}
 
 	@ReactMethod
-	public void init(ReadableMap options) {
-		Config.setDebugLogging(options.getBoolean("debug"));
+	public void init(ReadableMap options, String configFileName) {
+		try {
+			InputStream configInput = getReactApplicationContext().getAssets().open(configFileName);
+			initADBMobile(options.getBoolean("debug"), configInput);
+
+		} catch (IOException ex) {
+			// do something with the exception if needed
+		}
 	}
 
 	@ReactMethod
@@ -74,6 +88,16 @@ public class RNAdobeAnalyticsModule extends ReactContextBaseJavaModule {
 		Map<String, Object> contextMap = convertReadableMapToHashMap(contextData);
 		Log.i("RN-adobe-analytics", "####### trackAction ####### " + action);
 		Analytics.trackAction(action, contextMap);
+	}
+
+	@ReactMethod
+	public void trackLocation(double latitude, double longitude, ReadableMap contextData) {
+		Map<String, Object> contextMap = convertReadableMapToHashMap(contextData);
+		Location location = new Location("");
+		location.setLatitude(latitude);
+		location.setLongitude(longitude);
+		Log.i("RN-adobe-analytics", "####### trackLocation ####### ");
+		Analytics.trackLocation(location, contextMap);
 	}
 
 //Adding timed action events - start, update and end. Also get Marketing cloud ID function
