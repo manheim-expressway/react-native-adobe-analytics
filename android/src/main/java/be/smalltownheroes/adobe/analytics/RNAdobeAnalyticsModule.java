@@ -183,7 +183,7 @@ public class RNAdobeAnalyticsModule extends ReactContextBaseJavaModule {
 	}
 
 	private Map<String, Object> convertReadableMapToHashMap(ReadableMap readableMap) {
-		return readableMap.toHashMap();
+		return readableMap != null ? readableMap.toHashMap() : null;
 	}
 
 }
