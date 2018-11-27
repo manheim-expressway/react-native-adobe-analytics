@@ -9,7 +9,7 @@ const { RNAdobeAnalytics } = NativeModules;
 
 export class AdobeAnalyticsAPI {
   static init(debug = false, configFile) {
-    RNAdobeAnalytics.init({ debug, configFile });
+    RNAdobeAnalytics.init({ debug }, configFile);
   }
 
   static trackState(state, contextData = {}) {
@@ -53,14 +53,15 @@ new AdobeAnalyticsAPI();
 // Init component
 // ------------------------------------
 
-export const AdobeAnalytics = ({ debug }) => {
-  AdobeAnalyticsAPI.init(debug);
+export const AdobeAnalytics = ({ debug, configFile }) => {
+  AdobeAnalyticsAPI.init(debug, configFile);
 
   return null;
 };
 
 AdobeAnalytics.propTypes = {
-  debug: PropTypes.bool
+  debug: PropTypes.bool,
+  configFile: PropTypes.string.isRequired
 };
 
 // ------------------------------------
