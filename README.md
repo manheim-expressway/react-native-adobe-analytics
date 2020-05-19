@@ -21,7 +21,7 @@ Get your ADBMobileConfig.json file from Adobe Mobile Services.
 #### Install Adobe Mobile SDK
 Add this to your Podfile and run `pod install`
 ```
-pod 'AdobeMobileSDK', '~> 4.14.1'
+pod 'AdobeMobileSDK', '~> 4.19.2'
 ```
 
 When using `!use_frameworks` in your Podfile, add this to your `didFinishLaunchingWithOptions` function in AppDelegate.m

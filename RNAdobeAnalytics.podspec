@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
   s.source_files  = "ios/**/*.{h,m}"
 
   s.dependency 'React'
-  s.dependency "AdobeMobileSDK", "4.14.1"
+  s.dependency "AdobeMobileSDK", "4.19.2"
 end
